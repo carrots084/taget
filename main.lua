@@ -25,7 +25,7 @@ print("Welcome to TAGET, the Text Adventure Game Engine Thingy");
 print("Copyright (c) 2013 Robert Cochran");
 print("TAGET comes with ABSOLUTELY NO WARRANTY");
 print("This is free software, and you are welcome");
-print("to redistribute it under certain conditions");
+print("to redistribute and modify it under certain conditions");
 print("See the LICENSE file for details");
 
 print("\nStarting up...");
