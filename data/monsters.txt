@@ -1,0 +1,80 @@
+--[[
+
+TAGET - The 'Text Adventure Game Engine Thingy', used for the creation of simple text adventures
+Copyright (C) 2013 Robert Cochran
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 3
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License in the LICENSE file for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+]]
+
+--[[
+This file is just data for the engine,
+and thusly, not being a neccessary element
+of the program, is hereby not licensed under the GPL.
+]]
+
+return {
+	{
+		name = "Irrational Number",
+		baseHealth = 2,
+		baseAttack = 3,
+		baseDefense = 1,
+		baseExp = 5,
+		--critChance = 25,
+		startFloor = 1,
+		--moneyDrop = 5,
+		rarity = 60,
+	},
+	{
+		name = "Rhomboid",
+		baseHealth = 3,
+		baseAttack = 4,
+		baseDefense = 0,
+		baseExp = 5,
+		--critChance = 33,
+		startFloor = 1,
+		--moneyDrop = 5,
+		rarity = 50,
+	},
+	{
+		name = "Quadratic Parabola",
+		baseHealth = 4,
+		baseAttack = 5,
+		baseDefense = 4,
+		baseExp = 10,
+		--critChance = 45,
+		startFloor = 5,
+		--moneyDrop = 10,
+		rarity = 40,
+	},
+	{
+		name = "Trisectrix",
+		baseHealth = 6,
+		baseAttack = 6,
+		baseDefense = 5,
+		baseExp = 15,
+		--critChance = 50,
+		startFloor = 10,
+		--moneyDrop = 20,
+		rarity = 33,
+	},
+	boss = {
+		name = "Negative Prime",
+		baseHealth = 150,
+		baseAttack = 100,
+		baseDefense = 90,
+		hitChance = 70,
+	},
+};
