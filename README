@@ -1,0 +1,11 @@
+This project uses Lua, a very powerful and lightweight scripting language.
+Find it at http://www.lua.org/
+
+To start :
+
+Windows : drag 'main.lua' onto 'lua52.exe'
+
+Linux/Mac OS X : Use your own copy of Lua and run the 'main.lua' file
+
+Send any email related to TAGET to robert-software@cochranmail.com,
+and be sure to include 'TAGET' somewhere in the subject.
