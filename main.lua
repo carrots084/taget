@@ -21,7 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ]]
 
-print("Welcome to TAGET, the Text Adventure Game Engine Thingy");
+print("Welcome to TAGET 0.7.0,");
+print("the Text Adventure Game Engine Thingy");
 print("Copyright (c) 2013 Robert Cochran");
 print("TAGET comes with ABSOLUTELY NO WARRANTY");
 print("This is free software, and you are welcome");
