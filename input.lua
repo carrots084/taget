@@ -284,6 +284,18 @@ B - The boss room
 ]]);
 end
 
+-- End normal functions
+
+local function superAttack(input)
+	taget.player.attack = taget.player.attack * 9001;
+	attack(input);
+	taget.player.attack = taget.player.attack / 9001;
+end
+
+local specialVerbToFunction = {
+	greet_pleasently = superAttack,
+};
+
 local verbToFunction = {
 	exit = handleExit,
 	quit = handleExit,
@@ -313,6 +325,8 @@ function i.processInput()
 		io.write("\n");
 	elseif verbToFunction[input[1]] then
 		verbToFunction[input[1]](input);
+	elseif specialVerbToFunction[input[1]] then
+		specialVerbToFunction[input[1]](input);
 	else
 		print("I don't know \""..input[1].."\"!");
 	end
