@@ -249,7 +249,7 @@ local function look()
 	print("To your right is a "..taget.world.getTileTypePrint(dungeon, p.x + 1, p.y, p.z));
 end
 
-local function attack()
+local function attack(name)
 	local e = taget.encounter;
 	local p = taget.player;
 
@@ -269,7 +269,7 @@ local function attack()
 		return;
 	end
 
-	print("There's nothing to attack!");
+	print("There's nothing to "..name[1].."!");
 end
 
 local function legend()
