@@ -114,6 +114,8 @@ local keywords = {
 	},
 };
 
+-- TODO : Simplify move()'s internal logic some how... maybe a movement delta table?
+
 local function move(table)
 	local direction = tostring(table[2]);
 	local p = taget.player;
@@ -258,12 +260,14 @@ local function attack(name)
 		
 		local defense = (e.baseDefense > 0) and math.random(e.baseDefense) or 0;
 		local strength = math.random(p.attack);
+		
 		if strength - defense > -1 then
 			e.baseHealth = e.baseHealth - (strength - defense);
 		else
 			-- Set strength and defense to dummy values that come out to 0
 			strength = 1; defense = 1;
 		end
+
 		print("Hit the "..e.name.." for "..(strength - defense).." damage!");
 		print("The "..e.name.." has "..e.baseHealth.." hit points left!");
 		return;
@@ -294,6 +298,7 @@ end
 
 local specialVerbToFunction = {
 	greet_pleasently = superAttack,
+	falcon_punch = superAttack,
 };
 
 local verbToFunction = {
@@ -307,6 +312,7 @@ local verbToFunction = {
 	look = look,
 	attack = attack,
 	hit = attack,
+	punch = attack,
 	legend = legend,
 };
 

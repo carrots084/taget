@@ -43,7 +43,7 @@ function p.createEndpoint(floor, x, y)
 	endpoints[floor][#endpoints + 1] = { x = x, y = y, };
 end
 
-local function displaySpecialMap(floor)
+--[[local function displaySpecialMap(floor)
 	for j = 1, #floor[1] do
 		for i = 1, #floor do
 			io.write(floor[i][j]);
@@ -51,7 +51,7 @@ local function displaySpecialMap(floor)
 		
 		io.write("\n");
 	end
-end
+end]]
 
 local function addPathStep(path, directionWent)
 	if type(path) ~= "table" then
