@@ -28,7 +28,6 @@ function table.setReadOnly(t)
 		__index = t,
 		__newindex = function()
 			error("Attempted write to read-only table!", 2);
-
 		end
 	}
 
