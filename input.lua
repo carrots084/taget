@@ -288,6 +288,33 @@ B - The boss room
 ]]);
 end
 
+local function savegame()
+	f = assert(io.open("data\\savefile.cfg", "w+"))
+	f:write("taget.player = {", "\n")
+	for k,v in pairs(taget.player) do
+		f:write(k.." = "..v, "\n")
+		end
+	f:write("};", "\n")
+	f:write("taget.dungeon = {", "\n")
+	for k,v in pairs(taget.dungeon) do
+	for k1,v1 in pairs(v) do
+	for k2,v2 in pairs(v1) do
+	for k3,v3 in pairs(v2) do
+		f:write(k1.." = "..(v3 and "true" or "false"), "\n")
+		end
+		end
+		end
+		end
+	f:write("};", "\n")
+	f:close()
+	io.write("Game saved.", "\n")
+end
+
+local function restoregame()
+	dofile("data\\savefile.cfg")
+	io.write("Game restored!", "\n")
+end
+
 -- End normal functions
 
 local function superAttack(input)
@@ -302,6 +329,8 @@ local specialVerbToFunction = {
 };
 
 local verbToFunction = {
+	save = savegame,
+	restore = restoregame,
 	exit = handleExit,
 	quit = handleExit,
 	map = displayMap,
