@@ -1,7 +1,7 @@
 --[[
 
 TAGET - The 'Text Adventure Game Engine Thingy', used for the creation of simple text adventures
-Copyright (C) 2013 Robert Cochran
+Copyright (C) 2013 Robert Cochran and Niko Geil
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -288,31 +288,60 @@ B - The boss room
 ]]);
 end
 
-local function savegame()
-	f = assert(io.open("data\\savefile.cfg", "w+"))
-	f:write("taget.player = {", "\n")
+local function saveGame()
+	f, err = io.open("data/savefile.cfg", "w");
+
+	if not f then
+		print("Couldn't open the file for writing : "..err);
+		return;
+	end
+
+	f:write("taget.player = {\n");
+
 	for k,v in pairs(taget.player) do
-		f:write(k.." = "..v, "\n")
+		f:write("\t"..k.." = "..v..",\n");
+	end
+
+	f:write("};\n\n")
+	f:write("taget.dungeon = {\n")
+
+	for k,v in ipairs(taget.dungeon) do
+		f:write("\t{\n");
+
+		for k1,v1 in ipairs(v) do
+			f:write("\t\t{\n");
+
+			for k2,v2 in ipairs(v1) do
+				f:write("\t\t\t{\n");
+
+				for k3,v3 in pairs(v2) do
+					f:write("\t\t\t\t"..k3.." = "
+						..tostring(v3)..",\n");
+				end
+
+				f:write("\t\t\t},\n\n");
+			end
+
+			f:write("\t\t},\n\n");
 		end
-	f:write("};", "\n")
-	f:write("taget.dungeon = {", "\n")
-	for k,v in pairs(taget.dungeon) do
-	for k1,v1 in pairs(v) do
-	for k2,v2 in pairs(v1) do
-	for k3,v3 in pairs(v2) do
-		f:write(k1.." = "..(v3 and "true" or "false"), "\n")
-		end
-		end
-		end
-		end
-	f:write("};", "\n")
+
+		f:write("\t},\n\n");
+	end
+
+	f:write("};\n")
 	f:close()
-	io.write("Game saved.", "\n")
+	io.write("Game saved.\n")
 end
 
-local function restoregame()
-	dofile("data\\savefile.cfg")
-	io.write("Game restored!", "\n")
+local function restoreGame()
+	local ok, err = pcall(dofile, "data/savefile.cfg");
+
+	if not ok then
+		print("Couldn't open file for reading : "..err);
+		return;
+	end
+
+	io.write("Game restored!\n")
 end
 
 -- End normal functions
@@ -329,8 +358,9 @@ local specialVerbToFunction = {
 };
 
 local verbToFunction = {
-	save = savegame,
-	restore = restoregame,
+	save = saveGame,
+	restore = restoreGame,
+	load = restoreGame,
 	exit = handleExit,
 	quit = handleExit,
 	map = displayMap,

@@ -62,6 +62,8 @@ function w.generateDungeon(floors, width, length)
 
 	dungeon = {};
 	specials = {};
+
+	local idCount = 1;
 	
 	for a = 1, floors do
 		dungeon[a] = {};
@@ -75,8 +77,10 @@ function w.generateDungeon(floors, width, length)
 				dungeon[a][b][c] = {
 					type = w.room.standard,
 					explored = false,
-					id = a + (b - 1) + (c - 1),
+					id = idCount,
 				};
+
+				idCount = idCount + 1;
 				
 				specials[a][b][c] = 1;
 			end
@@ -113,7 +117,7 @@ function w.generateDungeon(floors, width, length)
 		end
 	end
 
-	-- TODO : Add a proper inventory system, then finish implementing shops and loot chets.
+	-- TODO : Add a proper inventory system, then finish implementing shops and loot chests.
 
 	--[[print("Generating shops...");
 
