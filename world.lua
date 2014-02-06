@@ -208,7 +208,7 @@ function w.generateDungeon(floors, width, length)
 		end
 	end
 
-	print("Complete! Took "..os.difftime(os.time(), start_time).." seconds.\n");
+	print("Complete! Took "..os.time() - start_time.." seconds.\n");
 
 	return dungeon;
 end
