@@ -134,9 +134,9 @@ local function move(table)
 					-- p.z is the new value, this is intentional
 					dungeon[p.z][p.x][p.y].explored = true;
 					print("Went up the ladder.");
-					end
-				else
-					print("Can't move up on this ladder.");
+				end
+			else
+				print("Can't move up on this ladder.");
 			end
 			
 			return;
