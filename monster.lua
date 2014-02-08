@@ -42,7 +42,7 @@ local function createEncounter()
 		taget.encounter.y = taget.player.y;
 		taget.encounter.z = taget.player.z;
 	
-		print("A random "..taget.encounter.name.." has appeared!");
+		print("A random "..taget.encounter.name.." has appeared!\n");
 	end
 end
 
@@ -55,7 +55,7 @@ function m.processEncounter()
 			taget.encounter.y = taget.player.y;
 			taget.encounter.z = taget.player.z;
 
-			print("The dungeon boss "..taget.encounter.name.." has appeared!");
+			print("The dungeon boss "..taget.encounter.name.." has appeared!\n");
 		else
 			createEncounter();
 		end
@@ -74,7 +74,7 @@ function m.processEncounter()
 			end
 
 			taget.player.experience = taget.player.experience + taget.encounter.baseExp;
-			print("Got "..taget.encounter.baseExp.." experience points!");
+			print("Got "..taget.encounter.baseExp.." experience points!\n");
 
 			taget.encounter = nil;
 
@@ -85,7 +85,7 @@ function m.processEncounter()
 				taget.input.chooseLevelUp();
 			end
 
-			print("Next level : "..(taget.player.nextLevel - taget.player.experience).." more experience points");
+			print("Next level : "..(taget.player.nextLevel - taget.player.experience).." more experience points\n");
 			return;
 		end
 
@@ -100,7 +100,7 @@ function m.processEncounter()
 		end
 
 		print("The "..taget.encounter.name.." hit you for "..(strength - defense).." damage!");
-		print("You have "..taget.player.health.." hit points left!");
+		print("You have "..taget.player.health.." hit points left!\n");
 
 		if taget.player.health <= 0 then
 			print("Game over! You died!");

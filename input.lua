@@ -133,10 +133,10 @@ local function move(table)
 					p.z = p.z - 1;
 					-- p.z is the new value, this is intentional
 					dungeon[p.z][p.x][p.y].explored = true;
-					print("Went up the ladder.");
+					print("Went up the ladder.\n");
 				end
 			else
-				print("Can't move up on this ladder.");
+				print("Can't move up on this ladder.\n");
 			end
 			
 			return;
@@ -146,9 +146,9 @@ local function move(table)
 					p.z = p.z + 1;
 					-- See above
 					dungeon[p.z][p.x][p.y].explored = true;
-					print("Went down the ladder.");
+					print("Went down the ladder.\n");
 				else
-					print("Can't move down on this ladder.");
+					print("Can't move down on this ladder.\n");
 				end
 			end
 		
@@ -165,12 +165,12 @@ local function move(table)
 		if taget.world.getTileType(dungeon, p.x, p.y - 1, p.z) ~= "wall" then
 			if p.y > 1 then
 				p.y = p.y - 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
+				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
 			else
-				print("Can't move into a wall!");
+				print("Can't move into a wall!\n");
 			end
 		else
-			print("Can't move into a wall!");
+			print("Can't move into a wall!\n");
 		end
 		
 		return;
@@ -184,12 +184,12 @@ local function move(table)
 		if taget.world.getTileType(dungeon, p.x, p.y + 1, p.z) ~= "wall" then
 			if p.y < #dungeon[1][1] then
 				p.y = p.y + 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
+				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
 			else
-				print("Can't move into a wall!");
+				print("Can't move into a wall!\n");
 			end
 		else
-			print("Can't move into a wall!");
+			print("Can't move into a wall!\n");
 		end
 		
 		return;
@@ -205,10 +205,10 @@ local function move(table)
 				p.x = p.x + 1;
 				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
 			else
-				print("Can't move into a wall!");
+				print("Can't move into a wall!\n");
 			end
 		else
-			print("Can't move into a wall!");
+			print("Can't move into a wall!\n");
 		end
 		
 		return;
@@ -222,21 +222,21 @@ local function move(table)
 		if taget.world.getTileType(dungeon, p.x - 1, p.y, p.z) ~= "wall" then
 			if p.x > 1 then
 				p.x = p.x - 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
+				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
 			else
-				print("Can't move into a wall!");
+				print("Can't move into a wall!\n");
 			end
 		else
-			print("Can't move into a wall!");
+			print("Can't move into a wall!\n");
 		end
 		
 		return;
 	end
 	
 	if direction == "u" or direction == "up" or direction == "d" or direction == "down" then
-		print("You're not on a ladder!");
+		print("You're not on a ladder!\n");
 	else	
-		print("Don't know of direction \""..direction.."\"!");
+		print("Don't know of direction \""..direction.."\"!\n");
 	end
 end
 
@@ -248,7 +248,7 @@ local function look()
 	print("In front of you is a "..taget.world.getTileTypePrint(dungeon, p.x, p.y - 1, p.z));
 	print("Behind you is a "..taget.world.getTileTypePrint(dungeon, p.x, p.y + 1, p.z));
 	print("To your left is a "..taget.world.getTileTypePrint(dungeon, p.x - 1, p.y, p.z));
-	print("To your right is a "..taget.world.getTileTypePrint(dungeon, p.x + 1, p.y, p.z));
+	print("To your right is a "..taget.world.getTileTypePrint(dungeon, p.x + 1, p.y, p.z).."\n");
 end
 
 local function attack(name)
@@ -269,11 +269,11 @@ local function attack(name)
 		end
 
 		print("Hit the "..e.name.." for "..(strength - defense).." damage!");
-		print("The "..e.name.." has "..e.baseHealth.." hit points left!");
+		print("The "..e.name.." has "..e.baseHealth.." hit points left!\n");
 		return;
 	end
 
-	print("There's nothing to "..name[1].."!");
+	print("There's nothing to "..name[1].."!\n");
 end
 
 local function legend()
@@ -341,7 +341,7 @@ local function restoreGame()
 		return;
 	end
 
-	io.write("Game restored!\n")
+	io.write("Game restored!\n\n")
 end
 
 -- End normal functions
