@@ -61,11 +61,11 @@ local function addPathStep(path, directionWent)
 	if type(directionWent) ~= "number" then
 		error("directionWent - expected number, got "..type(path), 2);
 	end
-	
+
 	path[#path].hasGone[directionWent] = true;
-	
+
 	local x, y = path[#path].x, path[#path].y;
-	
+
 	if directionWent == taget.world.direction.north then
 		y = y - 1;
 	elseif directionWent == taget.world.direction.east then
@@ -136,12 +136,28 @@ function p.wallIsOk(dungeon, specials, floor, isFirstFloor)
 				},
 			}
 		};
-		
+
 		local costF = {};
-		
+
 		local times = 0;
-		
+
 		while true do
+			if path[#path].x == 1 then
+				path[#path].hasGone[taget.world.direction.west] = true;
+			end
+
+			if path[#path].y == 1 then
+				path[#path].hasGone[taget.world.direction.north] = true;
+			end
+
+			if path[#path].x == #specials[1] then
+				path[#path].hasGone[taget.world.direction.east] = true;
+			end
+
+			if path[#path].y == #specials[1][1] then
+				path[#path].hasGone[taget.world.direction.south] = true;
+			end
+
 			local lowestCost = math.huge;
 			local lowestDirection = -1;
 
