@@ -8,7 +8,7 @@ Find it at http://www.lua.org/
 
 To start :
 
-Windows : drag 'main.lua' onto 'lua52.exe'
+Windows : Double click 'start_windows'
 
 Linux/Mac OS X : Use your own copy of Lua (at least 5.2)
 and run the 'main.lua' file
