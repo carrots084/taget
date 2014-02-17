@@ -1,3 +1,2 @@
-cd src
-..\lua52.exe src\main.lua
+lua52.exe src\main.lua
 pause
