@@ -226,12 +226,12 @@ local floorSymbols = table.setReadOnly{
 	[w.room.ladder] = "#",
 };
 
-function w.displayFloorMap(dungeon, floor, player)
+function w.displayFloorMap(dungeon, floor, player, showAll)
 	for j = 1, #dungeon[floor][1] do
 		for i = 1, #dungeon[floor] do
 			if floor == player.z and (i == player.x and j == player.y) then
 				io.write("X");
-			elseif dungeon[floor][i][j].explored then
+			elseif showAll or dungeon[floor][i][j].explored then
 				io.write(floorSymbols[dungeon[floor][i][j].type]);
 			else
 				io.write("?");

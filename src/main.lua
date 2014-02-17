@@ -31,6 +31,8 @@ print("See the LICENSE file for details");
 
 print("\nStarting up...");
 
+package.path = "../?.lua;" .. package.path;
+
 require("extensions");
 
 taget = {};
