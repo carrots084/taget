@@ -45,7 +45,7 @@ w.direction = table.setReadOnly{
 
 -- }}}
 
-function w.generateDungeon(floors, width, length)
+function w.generateDungeon(floors, width, length, suppressMessages)
 	if type(floors) ~= "number" then
 		error("floors - expected number, got "..type(floors), 2);
 	end
@@ -90,7 +90,7 @@ function w.generateDungeon(floors, width, length)
 	-- Change the spawnpoint to 'explored'
 	dungeon[1][math.ceil(width / 2)][math.ceil(length / 2)].explored = true;
 
-	print("Generating ladders...");
+	if not suppressMessages then print("Generating ladders...") end
 	
 	for i = 1, (floors - 1) do
 		while true do
@@ -119,7 +119,7 @@ function w.generateDungeon(floors, width, length)
 
 	-- TODO : Add a proper inventory system, then finish implementing shops and loot chests.
 
-	--[[print("Generating shops...");
+	--[[if not suppressMessages then print("Generating shops...") end
 
 	for i = 1, floors, 5 do
 		while true do
@@ -143,7 +143,7 @@ function w.generateDungeon(floors, width, length)
 		end
 	end --]]
 
-	--[[ print("Generating loot chests...");
+	--[[ if not suppressMessages then print("Generating loot chests...") end
 
 	math.randomseed(os.time() * math.random());
 
@@ -167,7 +167,7 @@ function w.generateDungeon(floors, width, length)
 		end
 	end --]]
 
-	print("Generating dungeon boss...");
+	if not suppressMessages then print("Generating dungeon boss...") end
 
 	while true do
 		math.randomseed(os.time() * math.random());
@@ -182,7 +182,7 @@ function w.generateDungeon(floors, width, length)
 		end
 	end
 
-	print("Generating walls...");
+	if not suppressMessages then print("Generating walls...") end
 
 	for i = 1, floors do
 		for a = 1, math.floor((width * length) * 0.25) do
@@ -212,7 +212,9 @@ function w.generateDungeon(floors, width, length)
 		end
 	end
 
-	print("Complete! Took "..os.time() - start_time.." seconds.\n");
+	if not suppressMessages then
+		print("Complete! Took "..os.time() - start_time.." seconds.\n");
+	end
 
 	return dungeon;
 end

@@ -29,37 +29,39 @@ taget = {};
 
 taget.world = require("world");
 
-dungeon = taget.world.generateDungeon(tonumber(arg[1]) or 10, 5, 5);
+for times = 1, (tonumber(arg[1]) or 100) do
+	local dungeon = taget.world.generateDungeon(15, 5, 5, true);
 
-for i = 1, #dungeon - 1 do
-	local ladderX = 0;
-	local ladderY = 0;
+	for i = 1, #dungeon - 1 do
+		local ladderX = 0;
+		local ladderY = 0;
 
-	for j = 1, #dungeon[1] do
-		for k = 1, #dungeon[1][1] do
-			if taget.world.getTileType(dungeon, i, j, k)
-				== taget.world.room.ladder
-			and taget.world.getTileType(dungeon, i + 1, j, k)
-				== taget.world.room.ladder
-			then
-				ladderX = j; ladderY = k;
-				goto ladder_break;	
+		for j = 1, #dungeon[1] do
+			for k = 1, #dungeon[1][1] do
+				if taget.world.getTileType(dungeon, i, j, k)
+					== taget.world.room.ladder
+				and taget.world.getTileType(dungeon, i + 1, j, k)
+					== taget.world.room.ladder
+				then
+					ladderX = j; ladderY = k;
+					goto ladder_break;	
+				end
 			end
 		end
-	end
 
-	::ladder_break::;
+		::ladder_break::;
 
-	if taget.world.getTileType(dungeon, ladderX - 1, ladderY, i) ~= "wall"
-		or taget.world.getTileType(dungeon, ladderX + 1, ladderY, i) 
-			~= "wall"
-		or taget.world.getTileType(dungeon, ladderX, ladderY - 1, i)
-			~= "wall"
-		or taget.world.getTileType(dungeon, ladderX, ladderY + 1, i)
-			~= "wall"
-	then
-		print("Blockade on floor "..i.."!");
-		taget.world.displayFloorMap(dungeon, i, {x = -1, y = -1}, true);
+		if taget.world.getTileType(dungeon, ladderX - 1, ladderY, i) ~= "wall"
+			or taget.world.getTileType(dungeon, ladderX + 1, ladderY, i) 
+				~= "wall"
+			or taget.world.getTileType(dungeon, ladderX, ladderY - 1, i)
+				~= "wall"
+			or taget.world.getTileType(dungeon, ladderX, ladderY + 1, i)
+				~= "wall"
+		then
+			print("Blockade on floor "..i.."!");
+			taget.world.displayFloorMap(dungeon, i, {x = -1, y = -1}, true);
+		end
 	end
 end
 
