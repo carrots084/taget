@@ -41,24 +41,21 @@ taget.world = require("world");
 taget.input = require("input");
 taget.monster = require("monster");
 
--- TODO : Fix dungeon generator to accept differently sized dimensions
-
---[[print("\nDungeon options : ");
+print("\nDungeon options (Leave blank to use default values) :");
 io.write("How many floors? [15] ");
 local input = tonumber(io.read());
-local floors = (type(input) ~= "nil" and math.abs(input) > 0) and math.abs(input) or 15;
+local floors = (type(input) ~= "nil" and math.abs(input) > 0)
+	and math.abs(input) or 15;
 
 io.write("How many columns? [5] ");
 input = tonumber(io.read());
-local cols = (type(input) ~= "nil" and math.abs(input) > 0) and math.abs(input) or 5;
+local cols = (type(input) ~= "nil" and math.abs(input) > 0)
+	and math.abs(input) or 5;
 
 io.write("How many rows? [5] ");
 input = tonumber(io.read());
-local rows = (type(input) ~= "nil" and math.abs(input) > 0) and math.abs(input) or 5;]]
-
-local floors = 15;
-local cols = 5;
-local rows = 5;
+local rows = (type(input) ~= "nil" and math.abs(input) > 0)
+	and math.abs(input) or 5;
 
 taget.player = {
 	x = math.ceil(cols / 2),
