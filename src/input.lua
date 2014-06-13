@@ -48,7 +48,7 @@ end
 local function displayMap(table)
 	local floor;
 	
-	if table[2] and type(tonumber(table[2])) ~= "nil" then
+	if table[2] and tonumber(table[2]) ~= "nil" then
 		floor = tonumber(table[2]);
 	else
 		floor = taget.player.z;
