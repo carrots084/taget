@@ -1,7 +1,7 @@
 --[[
 
 TAGET - The 'Text Adventure Game Engine Thingy', used for the creation of simple text adventures
-Copyright (C) 2013 Robert Cochran and Niko Geil
+Copyright (C) 2013-2014 Robert Cochran and Niko Geil
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

@@ -3,7 +3,7 @@
 --[[
 
 TAGET - The 'Text Adventure Game Engine Thingy', used for the creation of simple text adventures
-Copyright (C) 2013 Robert Cochran
+Copyright (C) 2013-2014 Robert Cochran
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 print("Welcome to TAGET 0.7.1,");
 print("the Text Adventure Game Engine Thingy");
-print("Copyright (c) 2013 Robert Cochran and Niko Geil");
+print("Copyright (c) 2013-2014 Robert Cochran and Niko Geil");
 print("TAGET comes with ABSOLUTELY NO WARRANTY");
 print("This is free software, and you are welcome");
 print("to redistribute and modify it under certain conditions");
