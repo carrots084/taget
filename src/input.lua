@@ -224,7 +224,7 @@ local function attack(name)
 		
 		local defense = (e.baseDefense > 0)
 			and math.random(e.baseDefense) or 0;
-		
+
 		local strength = math.random(p.attack);
 
 		for k, id in pairs(p.inventory) do
@@ -240,10 +240,10 @@ local function attack(name)
 				goto attack_continue;
 			end
 
-			if type(k) == "number" then goto attack_continue end 
+			if type(k) == "number" then goto attack_continue end
 
 			local itemObj = taget.item.getItem(id);
-			
+
 			if type(itemObj.onAttack) == "function" then
 				strength = itemObj.onAttack(strength);
 			end

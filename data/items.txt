@@ -49,7 +49,7 @@ stems from having half of this 75% go into you directly as health.
 				taget.player.health = taget.player.health
 					+ newDamage;
 			end
-			
+
 			return newDamage;
 		end,
 	},

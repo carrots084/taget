@@ -289,12 +289,12 @@ end
 function w.displayPrettyFloorMap(table)
 	local floor = (table[2] and tonumber(table[2]))
 			and tonumber(table[2]) or taget.player.z;
-	
+
 	if floor < 1 or floor > #taget.dungeon then
 		io.write("There is no floor "..floor.."!\n");
 		return;
 	end
-	
+
 	print("Floor "..floor);
 	print("--------");
 	w.displayFloorMap(taget.dungeon, floor, taget.player);
