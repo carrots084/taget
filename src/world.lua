@@ -286,4 +286,44 @@ function w.getTileTypePrint(dungeon, x, y, z)
 	return "wall";
 end
 
+function w.displayPrettyFloorMap(table)
+	local floor = (table[2] and tonumber(table[2]))
+			and tonumber(table[2]) or taget.player.z;
+	
+	if floor < 1 or floor > #taget.dungeon then
+		io.write("There is no floor "..floor.."!\n");
+		return;
+	end
+	
+	print("Floor "..floor);
+	print("--------");
+	w.displayFloorMap(taget.dungeon, floor, taget.player);
+	io.write("\n");
+end
+
+function w.legend()
+	print([[
+Map Legend
+----------
+X - Your location
+@ - A wall
+# - A ladder room
+. - An empty room
+B - The boss room
+]]);
+end
+
+function w.look()
+	local p = taget.player;
+	local d = taget.dungeon;
+
+	print("You are currently in a "..w.getTileTypePrint(d, p.x, p.y, p.z));
+	print("In front of you is a "..
+		w.getTileTypePrint(d, p.x, p.y - 1, p.z));
+	print("Behind you is a "..w.getTileTypePrint(d, p.x, p.y + 1, p.z));
+	print("To your left is a "..w.getTileTypePrint(d, p.x - 1, p.y, p.z));
+	print("To your right is a "..
+		w.getTileTypePrint(d, p.x + 1, p.y, p.z).."\n");
+end
+
 return w;

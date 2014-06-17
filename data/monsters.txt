@@ -19,12 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ]]
 
---[[
-This file is just data for the engine,
-and thusly, not being a neccessary element
-of the program, is hereby not licensed under the GPL.
-]]
-
 return {
 	{
 		name = "Irrational Number",

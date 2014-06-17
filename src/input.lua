@@ -45,31 +45,6 @@ local function handleExit()
 	end
 end
 
-local function displayMap(table)
-	local floor;
-	
-	if table[2] and tonumber(table[2]) ~= "nil" then
-		floor = tonumber(table[2]);
-	else
-		floor = taget.player.z;
-	end
-
-	if not floor then
-		io.write("\""..floor.."\" is not a valid number!\n");
-		return;
-	end
-	
-	if floor < 1 or floor > #taget.dungeon then
-		io.write("There is no floor "..floor.."!\n");
-		return;
-	end
-	
-	print("Floor "..floor);
-	print("--------");
-	taget.world.displayFloorMap(taget.dungeon, floor, taget.player);
-	io.write("\n");
-end
-
 local function status()
 	print("Your stats");
 	print("----------");
@@ -240,17 +215,6 @@ local function move(table)
 	end
 end
 
-local function look()
-	local p = taget.player;
-	local dungeon = taget.dungeon;
-
-	print("You are currently in a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
-	print("In front of you is a "..taget.world.getTileTypePrint(dungeon, p.x, p.y - 1, p.z));
-	print("Behind you is a "..taget.world.getTileTypePrint(dungeon, p.x, p.y + 1, p.z));
-	print("To your left is a "..taget.world.getTileTypePrint(dungeon, p.x - 1, p.y, p.z));
-	print("To your right is a "..taget.world.getTileTypePrint(dungeon, p.x + 1, p.y, p.z).."\n");
-end
-
 local function attack(name)
 	local e = taget.encounter;
 	local p = taget.player;
@@ -258,34 +222,51 @@ local function attack(name)
 	if e and e.x == p.x and e.y == p.y and e.z == p.z then
 		math.randomseed(os.time());
 		
-		local defense = (e.baseDefense > 0) and math.random(e.baseDefense) or 0;
+		local defense = (e.baseDefense > 0)
+			and math.random(e.baseDefense) or 0;
+		
 		local strength = math.random(p.attack);
+
+		for k, id in pairs(p.inventory) do
+			if type(id) == "table" then
+				for _, id2 in ipairs(id) do
+					local itemObj = taget.item.getItem(id2);
+
+					if itemObj.onAttack then
+						strength = itemObj.onAttack(strength);
+					end
+				end
+
+				goto attack_continue;
+			end
+
+			if type(k) == "number" then goto attack_continue end 
+
+			local itemObj = taget.item.getItem(id);
+			
+			if type(itemObj.onAttack) == "function" then
+				strength = itemObj.onAttack(strength);
+			end
+
+			::attack_continue::;
+		end
 		
 		if strength - defense > -1 then
 			e.baseHealth = e.baseHealth - (strength - defense);
 		else
-			-- Set strength and defense to dummy values that come out to 0
+			-- Set strength and defense to dummy values
+			-- that come out to 0
 			strength = 1; defense = 1;
 		end
 
-		print("Hit the "..e.name.." for "..(strength - defense).." damage!");
-		print("The "..e.name.." has "..e.baseHealth.." hit points left!\n");
+		print("Hit the "..e.name.." for "..(strength - defense)
+			.." damage!");
+		print("The "..e.name.." has "..e.baseHealth
+			.." hit points left!\n");
 		return;
 	end
 
 	print("There's nothing to "..name[1].."!\n");
-end
-
-local function legend()
-	print([[
-Map Legend
-----------
-X - Your location
-@ - A wall
-# - A ladder room
-. - An empty room
-B - The boss room
-]]);
 end
 
 local function saveGame()
@@ -305,16 +286,16 @@ local function saveGame()
 	f:write("};\n\n")
 	f:write("taget.dungeon = {\n")
 
-	for k,v in ipairs(taget.dungeon) do
+	for k, v in ipairs(taget.dungeon) do
 		f:write("\t{\n");
 
-		for k1,v1 in ipairs(v) do
+		for k1, v1 in ipairs(v) do
 			f:write("\t\t{\n");
 
-			for k2,v2 in ipairs(v1) do
+			for k2, v2 in ipairs(v1) do
 				f:write("\t\t\t{\n");
 
-				for k3,v3 in pairs(v2) do
+				for k3, v3 in pairs(v2) do
 					f:write("\t\t\t\t"..k3.." = "
 						..tostring(v3)..",\n");
 				end
@@ -328,9 +309,10 @@ local function saveGame()
 		f:write("\t},\n\n");
 	end
 
-	f:write("};\n")
-	f:close()
-	io.write("Game saved.\n")
+	f:write("};\n");
+
+	f:close();
+	io.write("Game saved.\n");
 end
 
 local function restoreGame()
@@ -341,8 +323,10 @@ local function restoreGame()
 		return;
 	end
 
-	io.write("Game restored!\n\n")
+	io.write("Game restored!\n\n");
 end
+
+
 
 -- End normal functions
 
@@ -363,16 +347,19 @@ local verbToFunction = {
 	load = restoreGame,
 	exit = handleExit,
 	quit = handleExit,
-	map = displayMap,
+	map = taget.world.displayPrettyFloorMap,
 	stats = status,
 	status = status,
 	go = move,
 	move = move,
-	look = look,
+	look = taget.world.look,
 	attack = attack,
 	hit = attack,
 	punch = attack,
-	legend = legend,
+	legend = taget.world.legend,
+	inventory = taget.item.listInv,
+	inv = taget.item.listInv,
+	i = taget.item.listInv,
 };
 
 function i.processInput()

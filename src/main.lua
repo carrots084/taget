@@ -38,8 +38,15 @@ require("extensions");
 taget = {};
 
 taget.world = require("world");
-taget.input = require("input");
 taget.monster = require("monster");
+taget.item = require("item");
+taget.input = require("input");
+
+print("Loading monster data...");
+taget.monster.initialize();
+
+print("Loading item data...");
+taget.item.initialize();
 
 print("\nDungeon options (Leave blank to use default values) :");
 io.write("How many floors? [15] ");
@@ -66,8 +73,19 @@ taget.player = {
 	attack = 5,
 	defense = 5,
 	level = 1,
-	experience = 0;
-	nextLevel = 25;
+	experience = 0,
+	nextLevel = 25,
+	inventory = {
+		helmet = 0,
+		chestplate = 0,
+		leggings = 0,
+		boots = 0,
+		weapon = 1,
+		equipment = {
+			limit = 3,
+			0, 0, 0,
+		},
+	},
 };
 
 --[[local pointsLeft = 10;
@@ -96,7 +114,7 @@ if input and (1 <= input and input <= pointsLeft) then
 	-- Don't bother with the pointsLeft; we're done with it here
 end]]
 
-local turnsUntilHealth = 5;
+local turnsUntilHealth = -1;
 
 print("\nStarting dungeon generation...");
 taget.dungeon = taget.world.generateDungeon(floors, cols, rows);
