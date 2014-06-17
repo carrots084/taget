@@ -1,0 +1,20 @@
+Items are simply a table which contain some values and some variables.
+
+name - The item's name, in string format.
+
+type - An enumerated type that defines what the item is, look in src/item.lua
+for details.
+
+description - The long description for the item.
+
+onHit - A function called if defined when the player is hit. It takes an
+argument of the amount of damage dealt, and returns the modified amount.
+
+onAttack - A function called if defined when the player attacks. It takes an
+argument of the base attack, returns the modified amount.
+
+onUse - A function called if defined when the player specifies the object with
+the 'use' command.
+
+onTurn - A function called if defined when the player has completed a turn
+(one command)
