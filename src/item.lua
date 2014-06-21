@@ -33,14 +33,14 @@ i.type = table.setReadOnly{
 };
 
 local itemTypeToName = table.setReadOnly{
-	i.type.weapon = "weapon",
-	i.type.helmet = "helmet",
-	i.type.chestplate = "chestplate",
-	i.type.leggings = "leggings",
-	i.type.boots = "boots",
-	i.type.equipment = "equipment",
-	i.type.food = "food",
-	i.type.misc = "misc",
+	[i.type.weapon] = "weapon",
+	[i.type.helmet] = "helmet",
+	[i.type.chestplate] = "chestplate",
+	[i.type.leggings] = "leggings",
+	[i.type.boots] = "boots",
+	[i.type.equipment] = "equipment",
+	[i.type.food] = "food",
+	[i.type.misc] = "misc",
 };
 
 function i.initialize()
@@ -75,6 +75,28 @@ function i.listInv(input)
 	end
 
 	print();
+end
+
+function i.getTypeName(id)
+	return itemTypeToName[i.getItem(id).type];
+end
+
+function i.displayInfo(id)
+	local item = i.getItem(id);
+	print("Item name - "..item.name);
+	print("\nItem type - "..i.getTypeName(id));
+	print("\nItem description - ");
+	print(item.description);
+	print("\nThis item has properties - ");
+
+	if item.onHit then print("* On hit") end
+	if item.onAttack then print("* On attack ") end
+	if item.onUse then print("* On use ") end
+	if item.onTurn then print("* On turn ") end
+end
+
+function i.queryInfo(table)
+	
 end
 
 return i;
