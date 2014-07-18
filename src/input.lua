@@ -360,6 +360,8 @@ local verbToFunction = {
 	inventory = taget.item.listInv,
 	inv = taget.item.listInv,
 	i = taget.item.listInv,
+	info = taget.item.displayInfo,
+	information = taget.item.displayInfo,
 };
 
 function i.processInput()

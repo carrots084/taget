@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 local i = {};
 
 i.type = table.setReadOnly{
+	none = 0,
 	helmet = 1,
 	chestplate = 2,
 	leggings = 3,
@@ -33,6 +34,7 @@ i.type = table.setReadOnly{
 };
 
 local itemTypeToName = table.setReadOnly{
+	[i.type.none] = "none",
 	[i.type.weapon] = "weapon",
 	[i.type.helmet] = "helmet",
 	[i.type.chestplate] = "chestplate",
@@ -42,6 +44,8 @@ local itemTypeToName = table.setReadOnly{
 	[i.type.food] = "food",
 	[i.type.misc] = "misc",
 };
+
+i.list = {};
 
 function i.initialize()
 	i.list = dofile("data/items.txt");
@@ -77,26 +81,56 @@ function i.listInv(input)
 	print();
 end
 
-function i.getTypeName(id)
-	return itemTypeToName[i.getItem(id).type];
+function i.getItemTypeName(id)
+	return itemTypeToName[id.type];
 end
 
-function i.displayInfo(id)
-	local item = i.getItem(id);
+function i.getItemId(itemType, itemId)
+	if itemType == "weapon" or itemType == "w" then
+		return taget.player.inventory.weapon;
+	elseif itemType == "helmet" or itemType == "h" then
+		return taget.player.inventory.helmet;
+	elseif itemType == "chestplate" or itemType == "c" then
+		return taget.player.inventory.chestplate;
+	elseif itemType == "leggings" or itemType == "l"  then
+		return taget.player.inventory.leggings;
+	elseif itemType == "boots" or itemType == "b" then
+		return taget.player.inventory.boots;
+	elseif itemType == "equipment" or itemType == "e" then
+		return taget.player.inventory.equipment[itemId];
+	elseif itemType == "inventory" or itemType == "i" then
+		return taget.player.inventory[itemId];
+	end
+end
+
+function i.displayInfo(invId)
+	local id;
+
+	if tonumber(invId[2]) then
+		id = i.getItemId("inventory", invId[2]);
+	else
+		id = i.getItemId(invId[2], invId[3]);
+	end
+
+	local item = i.getItem(tonumber(id));
+
+	if not item then
+		print("Item not found!");
+		return;
+	end
+
 	print("Item name - "..item.name);
-	print("\nItem type - "..i.getTypeName(id));
+	print("\nItem type - "..i.getItemTypeName(item));
 	print("\nItem description - ");
-	print(item.description);
+	io.write(item.description);
 	print("\nThis item has properties - ");
 
 	if item.onHit then print("* On hit") end
-	if item.onAttack then print("* On attack ") end
-	if item.onUse then print("* On use ") end
-	if item.onTurn then print("* On turn ") end
-end
+	if item.onAttack then print("* On attack") end
+	if item.onUse then print("* On use") end
+	if item.onTurn then print("* On turn") end
 
-function i.queryInfo(table)
-	
+	io.write("\n");
 end
 
 return i;
