@@ -89,42 +89,41 @@ local keywords = {
 	},
 };
 
--- TODO : Simplify move()'s internal logic some how... maybe a movement delta table?
+-- TODO : Simplify move()'s internal logic some how...
+-- maybe a movement delta table?
 
 local function move(table)
-	local direction = tostring(table[2]);
+	local dir = tostring(table[2]);
 	local p = taget.player;
-	local dungeon = taget.dungeon;
+	local d = taget.dungeon;
+	local getTileType = taget.world.getTileType;
+	local getTileTypePrint = taget.world.getTileTypePrint;
 	
-	if direction == "nil" then
+	if dir == "nil" then
 		print("You didn't say where to go!");
 		return;
 	end
 	
-	if taget.world.getTileType(dungeon, p.x, p.y, p.z) == "ladder" then
-		if direction == "u" or direction == "up" then
-			if dungeon[p.z - 1] then
-				if taget.world.getTileType(dungeon, p.x, p.y, p.z - 1) == "ladder" then
-					p.z = p.z - 1;
-					-- p.z is the new value, this is intentional
-					dungeon[p.z][p.x][p.y].explored = true;
-					print("Went up the ladder.\n");
-				end
+	if getTileType(d, p.x, p.y, p.z) == "ladder" then
+		if dir == "u" or dir == "up" then
+			if d[p.z - 1] then
+				p.z = p.z - 1;
+				-- p.z is the new value, this is intentional
+				d[p.z][p.x][p.y].explored = true;
+				print("Went up the ladder.\n");
 			else
 				print("Can't move up on this ladder.\n");
 			end
 			
 			return;
-		elseif direction == "d" or direction == "down" then
-			if dungeon[p.z + 1] then
-				if taget.world.getTileType(dungeon, p.x, p.y, p.z + 1) == "ladder" then
-					p.z = p.z + 1;
-					-- See above
-					dungeon[p.z][p.x][p.y].explored = true;
-					print("Went down the ladder.\n");
-				else
-					print("Can't move down on this ladder.\n");
-				end
+		elseif dir == "d" or dir == "down" then
+			if d[p.z + 1] then
+				p.z = p.z + 1;
+				-- See above
+				d[p.z][p.x][p.y].explored = true;
+				print("Went down the ladder.\n");
+			else
+				print("Can't move down on this ladder.\n");
 			end
 		
 			return;
@@ -132,15 +131,17 @@ local function move(table)
 		
 	end
 	
-	if keywords.north[direction] then
-		if dungeon[p.z][p.x][p.y - 1] then
-			dungeon[p.z][p.x][p.y - 1].explored = true;
+	if keywords.north[dir] then
+		if d[p.z][p.x][p.y - 1] then
+			d[p.z][p.x][p.y - 1].explored = true;
 		end
 	
-		if taget.world.getTileType(dungeon, p.x, p.y - 1, p.z) ~= "wall" then
+		if getTileType(d, p.x, p.y - 1, p.z) ~= "wall" then
 			if p.y > 1 then
 				p.y = p.y - 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
+				print("You've moved into a "
+					..getTileTypePrint(d, p.x, p.y, p.z)
+					.."\n");
 			else
 				print("Can't move into a wall!\n");
 			end
@@ -151,15 +152,17 @@ local function move(table)
 		return;
 	end
 	
-	if keywords.south[direction] then
-		if dungeon[p.z][p.x][p.y + 1] then
-			dungeon[p.z][p.x][p.y + 1].explored = true;
+	if keywords.south[dir] then
+		if d[p.z][p.x][p.y + 1] then
+			d[p.z][p.x][p.y + 1].explored = true;
 		end
 		
-		if taget.world.getTileType(dungeon, p.x, p.y + 1, p.z) ~= "wall" then
-			if p.y < #dungeon[1][1] then
+		if getTileType(d, p.x, p.y + 1, p.z) ~= "wall" then
+			if p.y < #d[1][1] then
 				p.y = p.y + 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
+				print("You've moved into a "
+					..getTileTypePrint(d, p.x, p.y, p.z)
+					.."\n");
 			else
 				print("Can't move into a wall!\n");
 			end
@@ -170,15 +173,17 @@ local function move(table)
 		return;
 	end
 	
-	if keywords.east[direction] then
-		if dungeon[p.z][p.x + 1] then
-			dungeon[p.z][p.x + 1][p.y].explored = true;
+	if keywords.east[dir] then
+		if d[p.z][p.x + 1] then
+			d[p.z][p.x + 1][p.y].explored = true;
 		end
 		
-		if taget.world.getTileType(dungeon, p.x + 1, p.y, p.z) ~= "wall" then			
-			if p.x < #dungeon[1] then
+		if getTileType(d, p.x + 1, p.y, p.z) ~= "wall" then
+			if p.x < #d[1] then
 				p.x = p.x + 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z));
+				print("You've moved into a "
+					..getTileTypePrint(d, p.x, p.y, p.z)
+					.."\n");
 			else
 				print("Can't move into a wall!\n");
 			end
@@ -189,15 +194,17 @@ local function move(table)
 		return;
 	end
 	
-	if keywords.west[direction] then
-		if dungeon[p.z][p.x - 1] then
-			dungeon[p.z][p.x - 1][p.y].explored = true;
+	if keywords.west[dir] then
+		if d[p.z][p.x - 1] then
+			d[p.z][p.x - 1][p.y].explored = true;
 		end
 		
-		if taget.world.getTileType(dungeon, p.x - 1, p.y, p.z) ~= "wall" then
+		if getTileType(d, p.x - 1, p.y, p.z) ~= "wall" then
 			if p.x > 1 then
 				p.x = p.x - 1;
-				print("You've moved into a "..taget.world.getTileTypePrint(dungeon, p.x, p.y, p.z).."\n");
+				print("You've moved into a "
+					..getTileTypePrint(d, p.x, p.y, p.z)
+					.."\n");
 			else
 				print("Can't move into a wall!\n");
 			end
@@ -208,7 +215,7 @@ local function move(table)
 		return;
 	end
 	
-	if direction == "u" or direction == "up" or direction == "d" or direction == "down" then
+	if dir == "u" or dir == "up" or dir == "d" or dir == "down" then
 		print("You're not on a ladder!\n");
 	else	
 		print("Don't know of direction \""..direction.."\"!\n");

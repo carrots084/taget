@@ -27,6 +27,18 @@ function m.initialize()
 	m.list = dofile("data/monsters.txt");
 end
 
+local function tweakStats(mon)
+	mon.baseHealth = (taget.player.z == 1) and mon.baseHealth or
+		math.floor(mon.baseHealth * ((taget.player.z + 1) / 2));
+	mon.baseAttack = (taget.player.z == 1) and mon.baseAttack or
+		math.floor(mon.baseAttack * ((taget.player.z + 1) / 2));
+	mon.baseDefense = (taget.player.z == 1) and mon.baseDefense or
+		math.floor(mon.baseDefense * ((taget.player.z + 1) / 2));
+	mon.baseExp = (taget.player.z == 1) and mon.baseExp
+		or math.floor(mon.baseExp * ((taget.player.z + 1) / 2));
+
+end
+
 local function createEncounter()
 	math.randomseed(os.time());
 	local encounterChance = math.random(1, 100);
@@ -36,14 +48,7 @@ local function createEncounter()
 			and encounterChance <= m.list[monsterNum].rarity then
 		local e = table.copy(m.list[monsterNum]);
 
-		e.baseHealth = (taget.player.z == 1) and e.baseHealth or
-			math.floor(e.baseHealth * ((taget.player.z + 1) / 2));
-		e.baseAttack = (taget.player.z == 1) and e.baseAttack or
-			math.floor(e.baseAttack * ((taget.player.z + 1) / 2));
-		e.baseDefense = (taget.player.z == 1) and e.baseDefense or
-			math.floor(e.baseDefense * ((taget.player.z + 1) / 2));
-		e.baseExp = (taget.player.z == 1) and e.baseExp
-			or math.floor(e.baseExp * ((taget.player.z + 1) / 2));
+		tweakStats(e);
 
 		e.x = taget.player.x;
 		e.y = taget.player.y;
@@ -53,6 +58,34 @@ local function createEncounter()
 	
 		print("A random "..taget.encounter.name.." has appeared!\n");
 	end
+end
+
+local function onMonsterDeath()
+	local t = taget;
+
+	print("Defeated the "..t.encounter.name.."!");
+			
+	if t.encounter.name == m.list.boss.name then
+		print("You win!");
+		os.exit();
+	end
+
+	t.player.experience = t.player.experience + t.encounter.baseExp;
+	print("Got "..t.encounter.baseExp.." experience points!\n");
+
+	t.encounter = nil;
+
+	if t.player.experience >= t.player.nextLevel then
+		t.player.level = t.player.level + 1;
+		print("Got to level "..t.player.level.."!");
+		t.player.nextLevel = t.player.nextLevel + (25 * t.player.level);
+		t.input.chooseLevelUp();
+	end
+
+	print("Next level : "..(t.player.nextLevel - t.player.experience)..
+		" more experience points\n");
+	
+	return;
 end
 
 function m.processEncounter()
@@ -73,6 +106,8 @@ function m.processEncounter()
 			createEncounter();
 		end
 	else
+		-- TODO : maybe have the monster eventually follow the player,
+		-- instead of just spontaneously combusting when he leaves?
 		if t.encounter.x ~= t.player.x or
 				t.encounter.y ~= t.player.y or
 				t.encounter.z ~= t.player.z then
@@ -81,32 +116,7 @@ function m.processEncounter()
 		end
 
 		if t.encounter.baseHealth <= 0 then
-			print("Defeated the "..t.encounter.name.."!");
-			
-			if t.encounter.name == m.list.boss.name then
-				print("You win!");
-				os.exit();
-			end
-
-			t.player.experience =
-				t.player.experience + t.encounter.baseExp;
-			print("Got "..
-				t.encounter.baseExp.." experience points!\n");
-
-			t.encounter = nil;
-
-			if t.player.experience >= t.player.nextLevel then
-				t.player.level = t.player.level + 1;
-				print("Got to level "..t.player.level.."!");
-				t.player.nextLevel =
-					t.player.nextLevel +
-					(25 * t.player.level);
-				t.input.chooseLevelUp();
-			end
-
-			print("Next level : "
-				..(t.player.nextLevel - t.player.experience)..
-				" more experience points\n");
+			onMonsterDeath();
 			return;
 		end
 
