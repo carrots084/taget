@@ -23,7 +23,6 @@ local m = {};
 
 taget.encounter = nil;
 
-
 function m.initialize()
 	m.list = dofile("data/monsters.txt");
 end
@@ -33,79 +32,100 @@ local function createEncounter()
 	local encounterChance = math.random(1, 100);
 	local monsterNum = math.random(1, #m.list);
 
-	if m.list[monsterNum].startFloor <= taget.player.z and encounterChance <= m.list[monsterNum].rarity then
-		taget.encounter = table.copy(m.list[monsterNum]);
+	if m.list[monsterNum].startFloor <= taget.player.z
+			and encounterChance <= m.list[monsterNum].rarity then
+		local e = table.copy(m.list[monsterNum]);
 
-		taget.encounter.baseHealth = (taget.player.z == 1) and taget.encounter.baseHealth or math.floor(taget.encounter.baseHealth * ((taget.player.z + 1) / 2));
-		taget.encounter.baseAttack = (taget.player.z == 1) and taget.encounter.baseAttack or math.floor(taget.encounter.baseAttack * ((taget.player.z + 1) / 2));
-		taget.encounter.baseDefense = (taget.player.z == 1) and taget.encounter.baseDefense or math.floor(taget.encounter.baseDefense * ((taget.player.z + 1) / 2));
-		taget.encounter.baseExp = (taget.player.z == 1) and taget.encounter.baseExp or math.floor(taget.encounter.baseExp * ((taget.player.z + 1) / 2));
+		e.baseHealth = (taget.player.z == 1) and e.baseHealth or
+			math.floor(e.baseHealth * ((taget.player.z + 1) / 2));
+		e.baseAttack = (taget.player.z == 1) and e.baseAttack or
+			math.floor(e.baseAttack * ((taget.player.z + 1) / 2));
+		e.baseDefense = (taget.player.z == 1) and e.baseDefense or
+			math.floor(e.baseDefense * ((taget.player.z + 1) / 2));
+		e.baseExp = (taget.player.z == 1) and e.baseExp
+			or math.floor(e.baseExp * ((taget.player.z + 1) / 2));
 
-		taget.encounter.x = taget.player.x;
-		taget.encounter.y = taget.player.y;
-		taget.encounter.z = taget.player.z;
+		e.x = taget.player.x;
+		e.y = taget.player.y;
+		e.z = taget.player.z;
+
+		taget.encounter = e;
 	
 		print("A random "..taget.encounter.name.." has appeared!\n");
 	end
 end
 
 function m.processEncounter()
+	local t = taget;
+
 	if not taget.encounter then
-		if taget.world.getTileType(taget.dungeon, taget.player.x, taget.player.y, taget.player.z) == "boss" then
-			taget.encounter = table.copy(m.list.boss);
+		if t.world.getTileType(t.dungeon, t.player.x, t.player.y,
+				t.player.z) == "boss" then
+			t.encounter = table.copy(m.list.boss);
 
-			taget.encounter.x = taget.player.x;
-			taget.encounter.y = taget.player.y;
-			taget.encounter.z = taget.player.z;
+			t.encounter.x = taget.player.x;
+			t.encounter.y = taget.player.y;
+			t.encounter.z = taget.player.z;
 
-			print("The dungeon boss "..taget.encounter.name.." has appeared!\n");
+			print("The dungeon boss "..
+				t.encounter.name.." has appeared!\n");
 		else
 			createEncounter();
 		end
 	else
-		if taget.encounter.x ~= taget.player.x or taget.encounter.y ~= taget.player.y or taget.encounter.z ~= taget.player.z then
-			taget.encounter = nil;
+		if t.encounter.x ~= t.player.x or
+				t.encounter.y ~= t.player.y or
+				t.encounter.z ~= t.player.z then
+			t.encounter = nil;
 			return;
 		end
 
-		if taget.encounter.baseHealth <= 0 then
-			print("Defeated the "..taget.encounter.name.."!");
+		if t.encounter.baseHealth <= 0 then
+			print("Defeated the "..t.encounter.name.."!");
 			
-			if taget.encounter.name == m.list.boss.name then
+			if t.encounter.name == m.list.boss.name then
 				print("You win!");
 				os.exit();
 			end
 
-			taget.player.experience = taget.player.experience + taget.encounter.baseExp;
-			print("Got "..taget.encounter.baseExp.." experience points!\n");
+			t.player.experience =
+				t.player.experience + t.encounter.baseExp;
+			print("Got "..
+				t.encounter.baseExp.." experience points!\n");
 
-			taget.encounter = nil;
+			t.encounter = nil;
 
-			if taget.player.experience >= taget.player.nextLevel then
-				taget.player.level = taget.player.level + 1;
-				print("Got to level "..taget.player.level.."!");
-				taget.player.nextLevel = taget.player.nextLevel + (25 * taget.player.level);
-				taget.input.chooseLevelUp();
+			if t.player.experience >= t.player.nextLevel then
+				t.player.level = t.player.level + 1;
+				print("Got to level "..t.player.level.."!");
+				t.player.nextLevel =
+					t.player.nextLevel +
+					(25 * t.player.level);
+				t.input.chooseLevelUp();
 			end
 
-			print("Next level : "..(taget.player.nextLevel - taget.player.experience).." more experience points\n");
+			print("Next level : "
+				..(t.player.nextLevel - t.player.experience)..
+				" more experience points\n");
 			return;
 		end
 
-		local strength = math.random(taget.encounter.baseAttack);
-		local defense = math.random(taget.player.defense);
+		local strength = math.random(t.encounter.baseAttack);
+		local defense = math.random(t.player.defense);
 
 		if strength - defense > -1 then
-			taget.player.health = taget.player.health - (strength - defense);
+			t.player.health =
+				t.player.health - (strength - defense);
 		else
 			-- Set them to dummy values that come out to 0
 			strength = 1; defense = 1;
 		end
 
-		print("The "..taget.encounter.name.." hit you for "..(strength - defense).." damage!");
-		print("You have "..taget.player.health.." hit points left!\n");
+		print("The "..t.encounter.name.." hit you for "
+			..(strength - defense).." damage!");
+		print("You have "..t.player.health.." hit points left!\n");
 
-		if taget.player.health <= 0 then
+		if t.player.health <= 0 then
 			print("Game over! You died!");
 			os.exit();
 		end
