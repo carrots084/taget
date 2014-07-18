@@ -26,10 +26,6 @@ return {
 		description = [[
 There's nothing here.
 ]],
-		--onHit = false,
-		--onAttack = false,
-		--onUse = false,
-		--onTurn = false,
 	},
 	{
 		name = "Soulthief",
