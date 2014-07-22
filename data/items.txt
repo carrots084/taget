@@ -49,5 +49,15 @@ stems from having half of this 75% go into you directly as health.
 			return newDamage;
 		end,
 	},
+	{
+		name = "Useless Ring of Uselessness",
+		type = taget.item.type.equipment,
+		description = [[
+A useless ring. Greaaat. :/
+]],
+		onTurn = function()
+			print("Your useless ring continues to be so!\n");
+		end,
+	},
 };
 

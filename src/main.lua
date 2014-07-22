@@ -30,6 +30,8 @@ print("(See the LICENSE file for details)");
 
 print("\nStarting up...");
 
+-- Put the src/ directory into the package path,
+-- so that require() will find them properly.
 package.path = "./src/?.lua;" .. package.path;
 
 require("extensions");
@@ -82,7 +84,7 @@ taget.player = {
 		weapon = 1,
 		equipment = {
 			limit = 3,
-			0, 0, 0,
+			2, 0, 0,
 		},
 	},
 };
@@ -122,17 +124,41 @@ print("Type 'help' for a list of verbs\n");
 
 while true do
 	io.write("> ");
+
 	taget.input.processInput();
 	taget.monster.processEncounter();
 
-	if turnsUntilHealth == 0 then
-		if (taget.player.maxHealth - taget.player.health) < 2 * taget.player.z then
-			taget.player.health = taget.player.maxHealth;
-		else
-			taget.player.health = taget.player.health + (2 * taget.player.z);
+	local p = taget.player;
+
+	for k, id in pairs(p.inventory) do
+		-- Objects whose key is a number are in the 'hold'
+		-- area, not equipped, so don't count those.
+		-- Having a value type of table means that it is
+		-- the current equipment data, which does not point
+		-- to a valid item id in and of itself.
+		if type(k) == "number" or type(id) == "table" then
+			goto turn_continue;
 		end
 
-		turnsUntilHealth  = 5;
+		local item = taget.item.getItem(id);
+
+		if item.onTurn then item.onTurn() end
+
+		::turn_continue::;
+	end
+
+	for slot = 1, #p.inventory.equipment do
+		local item = taget.item.getInvItem("equipment", slot);
+
+		if item.onTurn then item.onTurn() end
+	end
+
+	if turnsUntilHealth == 0 then
+		if p.health < p.maxHealth then
+			p.health = p.health + 1;
+		end
+
+		turnsUntilHealth = 5;
 	else
 		turnsUntilHealth = turnsUntilHealth - 1;
 	end

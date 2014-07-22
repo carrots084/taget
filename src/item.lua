@@ -85,7 +85,7 @@ function i.getItemTypeName(id)
 	return itemTypeToName[id.type];
 end
 
-function i.getItemId(itemType, itemId)
+function i.getItemId(itemType, itemSlot)
 	if itemType == "weapon" or itemType == "w" then
 		return taget.player.inventory.weapon;
 	elseif itemType == "helmet" or itemType == "h" then
@@ -97,25 +97,29 @@ function i.getItemId(itemType, itemId)
 	elseif itemType == "boots" or itemType == "b" then
 		return taget.player.inventory.boots;
 	elseif itemType == "equipment" or itemType == "e" then
-		return taget.player.inventory.equipment[itemId];
+		return taget.player.inventory.equipment[itemSlot];
 	elseif itemType == "inventory" or itemType == "i" then
-		return taget.player.inventory[itemId];
+		return taget.player.inventory[itemSlot];
 	end
 end
 
-function i.displayInfo(invId)
+function i.getInvItem(storageType, slot)
 	local id;
 
-	if tonumber(invId[2]) then
-		id = i.getItemId("inventory", invId[2]);
+	if tonumber(storageType) then
+		id = i.getItemId("inventory", tonumber(storageType));
 	else
-		id = i.getItemId(invId[2], invId[3]);
+		id = i.getItemId(storageType, tonumber(slot));
 	end
 
-	local item = i.getItem(tonumber(id));
+	return i.getItem(tonumber(id));
+end
+
+function i.displayInfo(invId)
+	local item = i.getInvItem(invId[2], invId[3]);
 
 	if not item then
-		print("Item not found!");
+		print("Item not found!\n");
 		return;
 	end
 

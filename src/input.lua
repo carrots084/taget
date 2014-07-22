@@ -235,27 +235,31 @@ local function attack(name)
 		local strength = math.random(p.attack);
 
 		for k, id in pairs(p.inventory) do
-			if type(id) == "table" then
-				for _, id2 in ipairs(id) do
-					local itemObj = taget.item.getItem(id2);
-
-					if itemObj.onAttack then
-						strength = itemObj.onAttack(strength);
-					end
-				end
-
+			-- Objects whose key is a number are in the 'hold'
+			-- area, not equipped, so don't count those.
+			-- Having a value type of table means that it is
+			-- the current equipment data, which does not point
+			-- to a valid item id in and of itself.
+			if type(k) == "number" or type(id) == "table" then
 				goto attack_continue;
 			end
 
-			if type(k) == "number" then goto attack_continue end
+			local item = taget.item.getItem(id);
 
-			local itemObj = taget.item.getItem(id);
-
-			if type(itemObj.onAttack) == "function" then
-				strength = itemObj.onAttack(strength);
+			if item.onAttack then
+				strength = item.onAttack(strength);
 			end
 
 			::attack_continue::;
+		end
+
+		for slot = 1, #p.inventory.equipment do
+			local item =
+				taget.item.getInvItem("equipment", slot);
+
+			if item.onAttack then
+				strength = item.onAttack(strength);
+			end
 		end
 		
 		if strength - defense > -1 then
@@ -277,6 +281,11 @@ local function attack(name)
 end
 
 local function saveGame()
+	do
+		print("Sorry, game saving is currently broken :(");
+		return;
+	end
+
 	f, err = io.open("data/savefile.cfg", "w");
 
 	if not f then
@@ -290,8 +299,9 @@ local function saveGame()
 		f:write("\t"..k.." = "..v..",\n");
 	end
 
-	f:write("};\n\n")
-	f:write("taget.dungeon = {\n")
+	f:write("};\n\n");
+
+	f:write("taget.dungeon = {\n");
 
 	for k, v in ipairs(taget.dungeon) do
 		f:write("\t{\n");
