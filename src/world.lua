@@ -210,6 +210,8 @@ function w.generateDungeon(floors, width, length, suppressMessages)
 				::wall_continue::;
 			end
 		end
+
+		print("Generation of floor "..i.." complete...");
 	end
 
 	if not suppressMessages then
