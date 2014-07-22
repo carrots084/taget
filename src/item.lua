@@ -48,7 +48,7 @@ local itemTypeToName = table.setReadOnly{
 i.list = {};
 
 function i.initialize()
-	i.list = dofile("data/items.txt");
+	i.list = dofile("data/items.lua");
 end
 
 function i.getItem(id)

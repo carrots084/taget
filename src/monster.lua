@@ -24,7 +24,7 @@ local m = {};
 taget.encounter = nil;
 
 function m.initialize()
-	m.list = dofile("data/monsters.txt");
+	m.list = dofile("data/monsters.lua");
 end
 
 local function tweakStats(mon)
