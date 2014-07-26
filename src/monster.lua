@@ -123,6 +123,33 @@ function m.processEncounter()
 		local strength = math.random(t.encounter.baseAttack);
 		local defense = math.random(t.player.defense);
 
+		for k, id in pairs(t.player.inventory) do
+			-- Objects whose key is a number are in the 'hold'
+			-- area, not equipped, so don't count those.
+			-- Having a value type of table means that it is
+			-- the current equipment data, which does not point
+			-- to a valid item id in and of itself.
+			if type(k) == "number" or type(id) == "table" then
+				goto defense_continue;
+			end
+
+			local item = taget.item.getItem(id);
+
+			if item.onHit then
+				defense = item.onHit(defense);
+			end
+
+			::defense_continue::;
+		end
+
+		for slot = 1, #t.player.inventory.equipment do
+			local item = taget.item.getInvItem("equipment", slot);
+
+			if item.onHit then
+				defense = item.onHit(defense);
+			end
+		end
+
 		if strength - defense > -1 then
 			t.player.health =
 				t.player.health - (strength - defense);
