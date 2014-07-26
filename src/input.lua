@@ -93,13 +93,13 @@ local keywords = {
 -- maybe a movement delta table?
 
 local function move(table)
-	local dir = tostring(table[2]);
+	local dir = table[2];
 	local p = taget.player;
 	local d = taget.dungeon;
 	local getTileType = taget.world.getTileType;
 	local getTileTypePrint = taget.world.getTileTypePrint;
 	
-	if dir == "nil" then
+	if not dir then
 		print("You didn't say where to go!");
 		return;
 	end
@@ -379,6 +379,7 @@ local verbToFunction = {
 	i = taget.item.listInv,
 	info = taget.item.displayInfo,
 	information = taget.item.displayInfo,
+	use = taget.item.useItem,
 };
 
 function i.processInput()
