@@ -137,4 +137,92 @@ function i.displayInfo(invId)
 	io.write("\n");
 end
 
+function i.deleteItem(itemType, itemSlot)
+	itemSlot = tonumber(itemSlot);
+
+	if itemType == "weapon" or itemType == "w" then
+		taget.player.inventory.weapon = 0;
+	elseif itemType == "helmet" or itemType == "h" then
+		taget.player.inventory.helmet = 0;
+	elseif itemType == "chestplate" or itemType == "c" then
+		taget.player.inventory.chestplate = 0;
+	elseif itemType == "leggings" or itemType == "l"  then
+		taget.player.inventory.leggings = 0;
+	elseif itemType == "boots" or itemType == "b" then
+		taget.player.inventory.boots = 0;
+	elseif itemType == "equipment" or itemType == "e" then
+		taget.player.inventory.equipment[itemSlot] = 0;
+	elseif itemType == "inventory" or itemType == "i" then
+		table.remove(taget.player.inventory, itemSlot);
+	elseif tonumber(itemType) then
+		table.remove(taget.player.inventory, tonumber(itemType));
+	end
+end
+
+function i.useItem(id)
+	local item = i.getInvItem(id[2], id[3]);
+
+	if not item then
+		print("Item not found!\n");
+		return;
+	end
+
+	if item.onUse then
+		item.onUse();
+
+		if item.type == i.type.food then
+			i.deleteItem(id[2], id[3]);
+		end
+	else
+		print("You can't use this item!\n");
+	end
+end
+
+-- Does not handle equipping equipment... TODO - handle it
+
+function i.equipItem(id)
+	local item = i.getInvItem("inventory", tonumber(id[2]));
+
+	if not item then
+		print("Item not found!\n");
+		return;
+	end
+
+	if (id[3] == "weapon" or id[3] == "w") and
+			taget.player.inventory.weapon ~= 0 then
+		print("You already have a weapon equipped!\n");
+		return;
+	elseif (id[3] == "helmet" or id[3] == "h") and
+			taget.player.inventory.helmet ~= 0 then
+		print("You already have a helmet equipped!\n");
+		return;
+	elseif (id[3] == "chestplate" or id[3] == "c") and
+			taget.player.inventory.chestplate ~= 0 then
+		print("You already have a chestplate equipped!\n");
+		return;
+	elseif (id[3] == "leggings" or id[3] == "l") and
+			taget.player.inventory.leggings ~= 0 then
+		print("You already have leggings equipped!\n");
+		return;
+	elseif (id[3] == "boots" or id[3] == "b") and
+			taget.player.inventory.boots ~= 0 then
+		print("You already have boots equipped!\n");
+		return;
+	end
+
+	if id[3] == "weapon" or id[3] == "w" then
+		taget.player.inventory.weapon = tonumber(id[2]);
+	elseif id[3] == "helmet" or id[3] == "h" then
+		taget.player.inventory.helmet = tonumber(id[2]);
+	elseif id[3] == "chestplate" or id[3] == "c" then
+		taget.player.inventory.chestplate = tonumber(id[2]);
+	elseif id[3] == "leggings" or id[3] == "l" then
+		taget.player.inventory.leggings = tonumber(id[2]);
+	elseif id[3] == "boots" or id[3] == "b" then
+		taget.player.inventory.boots = tonumber(id[2]);
+	end
+
+	i.deleteItem("inventory", tonumber(id[2]));
+end
+
 return i;

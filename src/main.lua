@@ -70,22 +70,23 @@ taget.player = {
 	y = math.ceil(rows / 2),
 	z = 1,
 	maxHealth = 10,
-	health = 10,
+	health = 5,
 	attack = 5,
 	defense = 5,
 	level = 1,
 	experience = 0,
 	nextLevel = 25,
 	inventory = {
-		helmet = 0,
-		chestplate = 0,
-		leggings = 0,
-		boots = 0,
+		helmet = 3,
+		chestplate = 4,
+		leggings = 5,
+		boots = 6,
 		weapon = 1,
 		equipment = {
 			limit = 3,
 			2, 0, 0,
 		},
+		7,
 	},
 };
 
